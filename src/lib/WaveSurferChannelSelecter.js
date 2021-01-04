@@ -21,29 +21,20 @@ export default class ChannelSelecterPlugin {
     }
 
     var audioCtx = this.wavesurfer.backend.ac;
-    var buffer = this.wavesurfer.backend.buffer;
-    var channels = 1;
-    let singleChannelBuffer = audioCtx.createBuffer(
-      channels,
-      buffer.length,
+    const singleChannelBuffer = audioCtx.createBuffer(
+      1,
+      this.baseAudioBuffer.length,
       audioCtx.sampleRate
     );
 
-    const bufferData = buffer.getChannelData(selectedChannel - 1);
-    for (let channel = 0; channel < channels; channel++) {
-      let nowBuffering = singleChannelBuffer.getChannelData(channel);
-      for (var k in bufferData) {
-        nowBuffering[k] = bufferData[k];
-      }
+    const bufferData = this.baseAudioBuffer.getChannelData(selectedChannel - 1);
+    let nowBuffering = singleChannelBuffer.getChannelData(0);
+    for (var k in bufferData) {
+      nowBuffering[k] = bufferData[k];
     }
 
-    let source = audioCtx.createBufferSource();
-    source.buffer = singleChannelBuffer;
-    source.connect(audioCtx.destination);
-
-    source.onended = () => {
-      console.log("White noise finished");
-    };
+    this.wavesurfer.backend.buffer = singleChannelBuffer;
+    this.wavesurfer.drawer.fireEvent("redraw");
   }
 
   _onReady() {
@@ -54,7 +45,7 @@ export default class ChannelSelecterPlugin {
     if (this.wavesurfer.isReady) {
       this._onReady();
     } else {
-      this.wavesurfer.once("ready", this._onReady.bind(this));
+      this.wavesurfer.on("ready", this._onReady.bind(this));
     }
   }
 
