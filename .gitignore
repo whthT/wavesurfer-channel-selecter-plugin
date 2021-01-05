@@ -104,3 +104,4 @@ typings/
 public/*
 dist/main.js
 dist/*.LICENSE.txt
+dist/index.html
