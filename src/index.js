@@ -7,6 +7,7 @@ window.addEventListener("DOMContentLoaded", () => {
     container: document.getElementById("wavesurfer"),
     backend: "WebAudio",
     splitChannels: true,
+    height: 60,
     plugins: [ChannelSelecterPlugin.create()],
   });
   wavesurfer.load("/4_channel_test.wav");
