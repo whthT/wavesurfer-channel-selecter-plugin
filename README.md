@@ -53,10 +53,10 @@ $ npm i wavesurfer-channel-selecter-plugin
 
 ### Screens
 
-- Initial View
+**Initial View**   
 ![WaveSurfer Channel Selecter Plugin Works Initial Screen](https://raw.githubusercontent.com/whthT/wavesurfer-channel-selecter-plugin/master/docs/screens/initial.png)
 
-- 3th, 4th and 5th channels selected view
+**3th, 4th and 5th channels selected view**   
 ![WaveSurfer Channel Selecter Plugin 3th, 4th and 5th channels selected view Screen](https://raw.githubusercontent.com/whthT/wavesurfer-channel-selecter-plugin/master/docs/screens/3-4-5-channels-selected.png)
 
 
