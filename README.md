@@ -51,6 +51,15 @@ $ npm i wavesurfer-channel-selecter-plugin
 
 - `channel-selected` - Trigger when selected channels are updated. Selected channels will pass as first argument.
 
+### Screens
+
+- Initial View
+![WaveSurfer Channel Selecter Plugin Works Initial Screen](https://raw.githubusercontent.com/whthT/wavesurfer-channel-selecter-plugin/master/docs/screens/initial.png)
+
+- 3th, 4th and 5th channels selected view
+![WaveSurfer Channel Selecter Plugin 3th, 4th and 5th channels selected view Screen](https://raw.githubusercontent.com/whthT/wavesurfer-channel-selecter-plugin/master/docs/screens/3-4-5-channels-selected.png)
+
+
 ### Todos
 
 - Support for MediaElement backend.
