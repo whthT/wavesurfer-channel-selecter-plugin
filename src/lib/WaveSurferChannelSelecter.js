@@ -73,8 +73,8 @@ export default class ChannelSelecterPlugin {
 
   _onReady() {
     setTimeout(() => {
+      // some delay
       this.baseAudioBuffer = this.wavesurfer.backend.buffer
-      console.log(this.baseAudioBuffer);
     }, 100)
   }
 
