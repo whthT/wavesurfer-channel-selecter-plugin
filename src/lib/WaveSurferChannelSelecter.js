@@ -1,10 +1,25 @@
+import { arrayFlatten } from "./helpers";
+
 export default class ChannelSelecterPlugin {
   static create(params) {
     return {
       name: "channelSelecterPlugin",
       deferInit: params && params.deferInit ? params.deferInit : false,
       params: params,
-      staticProps: {},
+      staticProps: {
+        showAllChannels() {
+          if (!this.initialisedPluginList.channelSelecterPlugin) {
+            this.initPlugin("channelSelecterPlugin");
+          }
+          return this.channelSelecterPlugin.resetChannels();
+        },
+        setActiveChannel() {
+          return this.channelSelecterPlugin.setActiveChannel.call(
+            this.channelSelecterPlugin,
+            ...arguments
+          );
+        },
+      },
       instance: ChannelSelecterPlugin,
     };
   }
@@ -13,32 +28,54 @@ export default class ChannelSelecterPlugin {
     this.params = params;
     this.wavesurfer = ws;
     this.baseAudioBuffer = null;
+    this.selectedChannels = []
   }
 
-  setActiveChannel(selectedChannel) {
-    if (!this.baseAudioBuffer) {
-      this.baseAudioBuffer = this.wavesurfer.backend.buffer;
+  setActiveChannel(..._selectedChannel) {
+    this.selectedChannels = arrayFlatten(_selectedChannel).sort();
+
+    if (!this.selectedChannels.length) {
+      this.resetChannels()
+      return true
     }
 
     var audioCtx = this.wavesurfer.backend.ac;
-    const singleChannelBuffer = audioCtx.createBuffer(
-      1,
+    const newAudioBuffer = audioCtx.createBuffer(
+      this.selectedChannels.length,
       this.baseAudioBuffer.length,
       audioCtx.sampleRate
     );
 
-    const bufferData = this.baseAudioBuffer.getChannelData(selectedChannel - 1);
-    let nowBuffering = singleChannelBuffer.getChannelData(0);
-    for (var k in bufferData) {
-      nowBuffering[k] = bufferData[k];
+    for (const channelIndex in this.selectedChannels) {
+      const channel = this.selectedChannels[channelIndex];
+      const bufferData = this.baseAudioBuffer.getChannelData(channel);
+      let nowBuffering = newAudioBuffer.getChannelData(parseInt(channelIndex));
+      for (var k in bufferData) {
+        nowBuffering[k] = bufferData[k];
+      }
     }
 
-    this.wavesurfer.backend.buffer = singleChannelBuffer;
-    this.wavesurfer.drawer.fireEvent("redraw");
+    this.wavesurfer.empty();
+    this._loadWithoutReadyEvent(newAudioBuffer);
+    this.wavesurfer.fireEvent("channel-selected", this.selectedChannels);
+  }
+
+  _loadWithoutReadyEvent(buffer) {
+    this.wavesurfer.backend.load(buffer);
+    this.wavesurfer.drawBuffer();
+  }
+
+  resetChannels() {
+    this.wavesurfer.empty();
+    this._loadWithoutReadyEvent(this.baseAudioBuffer)
+    this.selectedChannels = [];
   }
 
   _onReady() {
-    this.baseAudioBuffer = null;
+    setTimeout(() => {
+      this.baseAudioBuffer = this.wavesurfer.backend.buffer
+      console.log(this.baseAudioBuffer);
+    }, 100)
   }
 
   init() {
