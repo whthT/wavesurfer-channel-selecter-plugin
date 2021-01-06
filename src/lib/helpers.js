@@ -1,3 +1,12 @@
 export function arrayFlatten(arr) {
-    return arr.flat()
+  let concatArray = [];
+
+  for(const item of arr) {
+      if (Array.isArray(item)) {
+          concatArray.push(...item)
+      } else {
+          concatArray.push(item)
+      }
+  }
+  return concatArray
 }
