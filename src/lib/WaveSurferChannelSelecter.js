@@ -32,7 +32,7 @@ export default class ChannelSelecterPlugin {
   }
 
   setActiveChannel(..._selectedChannel) {
-    this.selectedChannels = arrayFlatten(_selectedChannel).sort();
+    this.selectedChannels = arrayFlatten(_selectedChannel).sort().map(v => v - 1);
     if (!this.selectedChannels.length) {
       this.resetChannels()
       return true

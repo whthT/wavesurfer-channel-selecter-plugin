@@ -12,15 +12,13 @@ window.addEventListener("DOMContentLoaded", () => {
   });
   wavesurfer.load("/4_channel_test.wav");
   const channelsEl = document.querySelector(".channels");
-  wavesurfer.on('ready', () => {
-    selectedChannels = []
-    wavesurfer.fireEvent('channel-selected', [])
-  })
+  wavesurfer.on("ready", () => {
+    selectedChannels = [];
+    wavesurfer.fireEvent("channel-selected", []);
+  });
   var html = "";
-  for (var i = 0; i < 6; i++) {
-    html += `<button class="select-channel" data-channel="${i}">${
-      i + 1
-    }</button>`;
+  for (var i = 1; i <= 6; i++) {
+    html += `<button class="select-channel" data-channel="${i}">${i}</button>`;
   }
   channelsEl.innerHTML = html;
 
@@ -47,7 +45,7 @@ window.addEventListener("DOMContentLoaded", () => {
   wavesurfer.on("channel-selected", (channels) => {
     Array.from(document.querySelectorAll(".select-channel")).forEach((el) => {
       var channel = parseInt(el.getAttribute("data-channel"));
-      if (channels.indexOf(channel) >= 0) {
+      if (channels.indexOf(channel - 1) >= 0) {
         el.classList.add("active");
       } else {
         el.classList.remove("active");
