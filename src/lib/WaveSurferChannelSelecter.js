@@ -62,6 +62,7 @@ export default class ChannelSelecterPlugin {
   _loadWithoutReadyEvent(buffer) {
     this.wavesurfer.backend.load(buffer);
     this.wavesurfer.drawBuffer();
+    this.wavesurfer.isReady = true
   }
 
   resetChannels() {
